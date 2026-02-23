@@ -1,0 +1,156 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  width: 700px;
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+#todoinput {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 12px;
+  border: 2px solid #eee;
+  outline: none;
+  transition: 0.3s;
+  font-size: 14px;
+}
+
+#todoinput:focus {
+  border-color: #667eea;
+}
+
+#addBtn {
+  margin-top: 10px;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 12px;
+  background: #667eea;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#addBtn:hover {
+  background: #5563d1;
+  transform: translateY(-2px);
+}
+
+.filter {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+  gap: 10px;
+  width: 100%;
+}
+
+.filter button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 14px;
+  border: none;
+  background: #f1f1f1;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.filter button.active {
+  background: #667eea;
+  color: white;
+  transform: scale(1.05);
+}
+
+/* .filter button:hover {
+  background: #667eea;
+  color: white;
+} */
+
+ul {
+  list-style: none;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+li {
+  background: #f9f9f9;
+  padding: 10px 12px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: 0.3s;
+}
+
+li:hover {
+  transform: scale(1.02);
+}
+
+li span {
+  flex: 1;
+  margin-left: 8px;
+  font-size: 14px;
+}
+
+li input[type="checkbox"] {
+  accent-color: #667eea;
+}
+
+li button {
+  background: #ff6b6b;
+  border: none;
+  color: white;
+  padding: 5px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: 0.3s;
+}
+
+li button:hover {
+  background: #e55050;
+}
+
+.completed {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#taskCount {
+  font-size: 13px;
+  color: #555;
+}
+
+#clearCompleted {
+  background: transparent;
+  border: none;
+  color: #667eea;
+  cursor: pointer;
+  font-size: 13px;
+  transition: 0.3s;
+}
+
+#clearCompleted:hover {
+  text-decoration: underline;
+}

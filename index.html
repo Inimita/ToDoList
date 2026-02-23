@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List</title>
+    <link rel="stylesheet" href="todolist.css">
+</head>
+<body>
+    <div class="container">
+        <input type="text" id="todoinput" placeholder="Masukan list">
+        <button id="addBtn">Tambah</button>
+        <div class="filter">
+            <button data-filter="all" class="active">Semua</button>
+            <button data-filter="active">Aktif</button>
+            <button data-filter="completed">Selesai</button>
+        </div>
+        <ul id="todolist"></ul>
+        <div class="completed"></div>
+        <span id="taskCount"></span>
+        <button id="clearCompleted">Hapus</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
