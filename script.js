@@ -1,65 +1,70 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
 
   const input = document.getElementById("todoinput");
   const addBtn = document.getElementById("addBtn");
   const todoList = document.getElementById("todolist");
   const filterButtons = document.querySelectorAll(".filter button");
   const taskCount = document.getElementById("taskCount");
-  const clearCompletedBtn = document.getElementById("clearCompleted");
 
-  let todos = JSON.parse(localStorage.getItem("todos")) || [];
+  const API_URL = "http://localhost:3000/api/todos";
+
+  let todos = [];
   let currentFilter = "all";
 
-  renderTodos();
+  async function fetchTodos() {
+    const res = await fetch(API_URL);
+    todos = await res.json();
+    console.log(todos)
+    renderTodos();
+  }
 
-  addBtn.addEventListener("click", function () {
+  async function addTodo() {
     const text = input.value.trim();
 
-    if (text === "") {
+    if (!text) {
       alert("Tugas tidak boleh kosong!");
       return;
     }
 
-    const newTodo = {
-      id: Date.now(),
-      text: text,
-      completed: false
-    };
+    await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ text })
+    });
 
-    todos.push(newTodo);
-    save();
     input.value = "";
-    renderTodos();
-  });
+    fetchTodos();
+  }
 
-const filterbuttons = document.querySelectorAll(".filter button");
+  async function toggleTodo(id) {
+    await fetch(`${API_URL}/${id}`, {
+      method: "PUT"
+    });
 
-filterbuttons.forEach(button => {
-  button.addEventListener("click", function () {
+    fetchTodos();
+  }
 
-    filterbuttons.forEach(btn => btn.classList.remove("active"));
+  async function deleteTodo(id) {
+    await fetch(`${API_URL}/${id}`, {
+      method: "DELETE"
+    });
 
-    this.classList.add("active");
+    fetchTodos();
+  }
 
-    currentFilter = this.dataset.filter;
-    renderTodos();
-  });
-});
-
-  clearCompletedBtn.addEventListener("click", function () {
-    todos = todos.filter(todo => !todo.completed);
-    save();
-    renderTodos();
-  });
-console.log("FILTER: ", currentFilter);
   function renderTodos() {
+
     todoList.innerHTML = "";
 
     let filteredTodos = todos;
 
     if (currentFilter === "active") {
       filteredTodos = todos.filter(todo => !todo.completed);
-    } else if (currentFilter === "completed") {
+    }
+
+    if (currentFilter === "completed") {
       filteredTodos = todos.filter(todo => todo.completed);
     }
 
@@ -70,9 +75,7 @@ console.log("FILTER: ", currentFilter);
       const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
       checkbox.checked = todo.completed;
-      checkbox.addEventListener("change", function () {
-        toggleTodo(todo.id);
-      });
+      checkbox.addEventListener("change", () => toggleTodo(todo.id));
 
       const span = document.createElement("span");
       span.textContent = todo.text;
@@ -84,9 +87,7 @@ console.log("FILTER: ", currentFilter);
 
       const deleteBtn = document.createElement("button");
       deleteBtn.textContent = "Hapus";
-      deleteBtn.addEventListener("click", function () {
-        deleteTodo(todo.id);
-      });
+      deleteBtn.addEventListener("click", () => deleteTodo(todo.id));
 
       li.appendChild(checkbox);
       li.appendChild(span);
@@ -94,26 +95,7 @@ console.log("FILTER: ", currentFilter);
 
       todoList.appendChild(li);
     });
-
     updateCount();
-  }
-
-  function toggleTodo(id) {
-    todos = todos.map(todo =>
-      todo.id === id
-        ? { ...todo, completed: !todo.completed }
-        : todo
-    );
-
-    save();
-    renderTodos();
-    console.log(todos);
-  }
-
-  function deleteTodo(id) {
-    todos = todos.filter(todo => todo.id !== id);
-    save();
-    renderTodos();
   }
 
   function updateCount() {
@@ -121,8 +103,19 @@ console.log("FILTER: ", currentFilter);
     taskCount.textContent = `${activeCount} tugas`;
   }
 
-  function save() {
-    localStorage.setItem("todos", JSON.stringify(todos));
-  }
+  filterButtons.forEach(button => {
 
+    button.addEventListener("click", () => {
+
+      filterButtons.forEach(btn => btn.classList.remove("active"));
+
+      button.classList.add("active");
+
+      currentFilter = button.dataset.filter;
+
+      renderTodos();
+    });
+  });
+  addBtn.addEventListener("click", addTodo);
+  fetchTodos();
 });

@@ -27,7 +27,9 @@ app.get("/api/todos/:id", (req, res) => {
   res.json(todo);
 });
 
+
 app.post("/api/todos", (req, res) => {
+  console.log(req.body)
   const { text } = req.body;
 
   if (!text) {
@@ -36,8 +38,13 @@ app.post("/api/todos", (req, res) => {
     });
   }
 
+  const newId =
+    todos.length > 0
+      ? Math.max(...todos.map(todo => todo.id)) + 1
+      : 1;
+
   const newTodo = {
-    id: todos.length + 1,
+    id: newId,
     text: text,
     completed: false
   };
@@ -45,6 +52,39 @@ app.post("/api/todos", (req, res) => {
   todos.push(newTodo);
 
   res.status(201).json(newTodo);
+});
+
+
+app.put("/api/todos/:id", (req, res) => {
+
+  const id = parseInt(req.params.id);
+
+  todos = todos.map(todo =>
+    todo.id === id
+      ? { ...todo, completed: !todo.completed }
+      : todo
+  );
+
+  res.json({ message: "Todo berhasil diupdate", todos });
+});
+
+
+app.delete("/api/todos/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+
+  const index = todos.findIndex(todo => todo.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({
+      message: "Todo tidak ditemukan"
+    });
+  }
+
+  todos.splice(index, 1);
+
+  res.json({
+    message: "Todo berhasil dihapus"
+  });
 });
 
 app.listen(PORT, () => {
