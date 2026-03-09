@@ -7,12 +7,6 @@ const PORT = 3000;
 app.use(cors());
 app.use(express.json());
 
-
-/*
-GET /api/todos
-Mengirimkan seluruh data todo dalam bentuk JSON
-*/
-
 let todos = [];
 
 app.get("/api/todos", (req, res) => {
@@ -32,12 +26,6 @@ app.get("/api/todos/:id", (req, res) => {
 
   res.json(todo);
 });
-
-/*
-POST /api/todos
-Menambahkan todo baru ke dalam array
-*/
-
 
 app.post("/api/todos", (req, res) => {
   const { text } = req.body;
